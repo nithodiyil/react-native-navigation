@@ -523,6 +523,10 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         WritableMap data = Arguments.createMap();
         String navigatorEventId = getCurrentScreenStack().peek().getNavigatorEventId();
         NavigationApplication.instance.getEventEmitter().sendNavigatorEvent("bottomTabReselected", navigatorEventId, data);
+
+    // start edit
+        NavigationApplication.instance.getEventEmitter().sendBottomTabReselectedEvent(getCurrentScreenStack().peek().getScreenParams(), NavigationType.BottomTabSelected);
+    // end edit
     }
 
     private void showNewStack(int position, NavigationType type) {

@@ -34,6 +34,11 @@ public class EventEmitter {
         sendGlobalScreenChangedEvent("didDisappear", params.timestamp, params.screenId, type);
     }
 
+    public void sendBottomTabReselectedEvent(BaseScreenParams params, NavigationType type) {
+        sendScreenChangedEventToJsScreen("bottomTabReselected", params.getNavigatorEventId());
+        sendGlobalScreenChangedEvent("bottomTabReselected", params.timestamp, params.screenId, type);
+    }
+    
     public void sendActivityResumed(String id) {
         sendScreenChangedEventToJsScreen("onActivityResumed", id);
     }

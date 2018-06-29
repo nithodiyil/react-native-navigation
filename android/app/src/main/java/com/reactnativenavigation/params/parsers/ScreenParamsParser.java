@@ -29,7 +29,13 @@ public class ScreenParamsParser extends Parser {
     public static ScreenParams parse(Bundle params) {
         ScreenParams result = new ScreenParams();
         result.screenId = params.getString(KEY_SCREEN_ID);
-        result.timestamp = params.getDouble(KEY_TIMESTAMP);
+        Object timestampObj = params.get(KEY_TIMESTAMP);
+        if (timestampObj instanceof Integer) {
+            result.timestamp = ((int) timestampObj) * 1.0;
+        } else if (timestampObj instanceof Double) {
+            result.timestamp = (double) timestampObj;
+        }
+
         assertKeyExists(params, KEY_NAVIGATION_PARAMS);
         result.navigationParams = new NavigationParams(params.getBundle(KEY_NAVIGATION_PARAMS));
 
@@ -51,7 +57,8 @@ public class ScreenParamsParser extends Parser {
             result.fragmentCreatorPassProps = params.getBundle(FRAGMENT_CREATOR_PASS_PROPS);
         }
 
-        result.fabParams = ButtonParser.parseFab(params, result.navigationParams.navigatorEventId, result.navigationParams.screenInstanceId);
+        result.fabParams = ButtonParser.parseFab(params, result.navigationParams.navigatorEventId,
+                result.navigationParams.screenInstanceId);
 
         result.tabLabel = getTabLabel(params);
         result.tabIcon = new TabIconParser(params).parse();
@@ -59,7 +66,8 @@ public class ScreenParamsParser extends Parser {
         result.animateScreenTransitions = new AnimationParser(params).parse();
         result.sharedElementsTransitions = getSharedElementsTransitions(params);
 
-        result.animationType = params.getString(ANIMATION_TYPE, AppStyle.appStyle == null ? "" : AppStyle.appStyle.screenAnimationType);
+        result.animationType = params.getString(ANIMATION_TYPE,
+                AppStyle.appStyle == null ? "" : AppStyle.appStyle.screenAnimationType);
 
         return result;
     }

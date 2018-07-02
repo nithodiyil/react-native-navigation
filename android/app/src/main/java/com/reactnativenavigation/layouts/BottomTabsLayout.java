@@ -58,8 +58,8 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
     private final SideMenuParams leftSideMenuParams;
     private final SideMenuParams rightSideMenuParams;
     private final SlidingOverlaysQueue slidingOverlaysQueue = new SlidingOverlaysQueue();
-    private 
-    @Nullable 
+    private
+    @Nullable
     SideMenu sideMenu;
     private int currentStackIndex = 0;
     private LightBox lightBox;
@@ -457,13 +457,13 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
             task.run(screenStack);
         } catch (ScreenStackNotFoundException e) {
             if (onPushComplete != null) {
-                onPushComplete.reject("Navigation", "Could not perform action on stack [" + navigatorId + "]." + 
-                "This should not have happened, it probably means a navigator action" + 
-                "was called from an unmounted tab.");
+                onPushComplete.reject("Navigation", "Could not perform action on stack [" + navigatorId + "]." +
+                                                    "This should not have happened, it probably means a navigator action" +
+                                                    "was called from an unmounted tab.");
             }
-            Log.e("Navigation", "Could not perform action on stack [" + navigatorId + "]." + 
-            "This should not have happened, it probably means a navigator action" + 
-            "was called from an unmounted tab.");
+            Log.e("Navigation", "Could not perform action on stack [" + navigatorId + "]." +
+                                "This should not have happened, it probably means a navigator action" +
+                                "was called from an unmounted tab.");
         }
     }
 

@@ -498,24 +498,7 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         if (wasSelected) {
             sendTabReselectedEventToJs();
             // popToRoot current screen
-            final ScreenParams currentScreenParams = getCurrentScreenStack().peek().getAllScreenParams();
-            performOnStack(currentScreenParams.getNavigatorId(), new Task<ScreenStack>() {
-                @Override
-                public void run(final ScreenStack stack) {
-                    stack.popToRoot(false, currentScreenParams.timestamp, new ScreenStack.OnScreenPop() {
-                        @Override
-                        public void onScreenPopAnimationEnd() {
-                            if (isCurrentStack(stack)) {
-                                setBottomTabsStyleFromCurrentScreen();
-                                alignSnackbarContainerWithBottomTabs(
-                                        (LayoutParams) snackbarAndFabContainer.getLayoutParams(),
-                                        currentScreenParams.styleParams);
-                                EventBus.instance.post(new ScreenChangedEvent(stack.peek().getScreenParams()));
-                            }
-                        }
-                    });
-                }
-            });
+            popToRootTabWithoutAnimation(currentStackIndex, NavigationType.BottomTabReSelected);
             // end
             return false;
         }
@@ -526,7 +509,31 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         return true;
     }
 
-    private void switchTab(int position, NavigationType navigationType) {
+    private void popToRootTabWithoutAnimation(int position, final NavigationType navigationType) {
+
+        final ScreenParams currentScreenParams = screenStacks[position].peek().getAllScreenParams();
+        performOnStack(currentScreenParams.getNavigatorId(), new Task<ScreenStack>() {
+            @Override
+            public void run(final ScreenStack stack) {
+                stack.popToRoot(false, currentScreenParams.timestamp, new ScreenStack.OnScreenPop() {
+                    @Override
+                    public void onScreenPopAnimationEnd() {
+                        if (isCurrentStack(stack)) {
+                            setBottomTabsStyleFromCurrentScreen();
+                            alignSnackbarContainerWithBottomTabs(
+                                    (LayoutParams) snackbarAndFabContainer.getLayoutParams(),
+                                    currentScreenParams.styleParams);
+                            EventBus.instance.post(new ScreenChangedEvent(stack.peek().getScreenParams()));
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void switchTab(final int position, final NavigationType navigationType) {
+        popToRootTabWithoutAnimation(currentStackIndex, navigationType);
+        popToRootTabWithoutAnimation(position, navigationType);
         hideCurrentStack();
         showNewStack(position, navigationType);
         EventBus.instance.post(new ScreenChangedEvent(getCurrentScreenStack().peek().getScreenParams()));
@@ -557,6 +564,7 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
     }
 
     private void showNewStack(int position, NavigationType type) {
+        Log.i("testLabel", "testing in showNewStack");
         showStackAndUpdateStyle(screenStacks[position], type);
         currentStackIndex = position;
     }

@@ -167,6 +167,12 @@ android/captures/
 # Keystore files
 *.jks
 
+android/.project
+android/.settings
+android/app/.classpath
+android/app/.project
+android/app/.settings
+
 ##################
 # React-Native
 ##################
@@ -214,6 +220,7 @@ android/keystores/debug.keystore
 # VSCODE
 jsconfig.json
 .vscode/launchReactNative.js
+.vscode
 example/yarn.lock
 example/package-lock.json
 /package-lock.json

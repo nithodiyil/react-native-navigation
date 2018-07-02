@@ -518,7 +518,7 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         });
     }
 
-    private void switchTab(final int position, final NavigationType navigationType) {
+    private void switchTab(int position, NavigationType navigationType) {
         popStackToRootWithoutAnimation(currentStackIndex, navigationType);
         popStackToRootWithoutAnimation(position, navigationType);
         hideCurrentStack();

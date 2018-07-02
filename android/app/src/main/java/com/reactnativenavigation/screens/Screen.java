@@ -52,7 +52,8 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
     protected StyleParams styleParams;
     public final SharedElements sharedElements;
 
-    public Screen(AppCompatActivity activity, ScreenParams screenParams, LeftButtonOnClickListener leftButtonOnClickListener) {
+    public Screen(AppCompatActivity activity, ScreenParams screenParams,
+            LeftButtonOnClickListener leftButtonOnClickListener) {
         super(activity);
         this.activity = activity;
         this.screenParams = screenParams;
@@ -81,7 +82,7 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
             topBar.onContextualMenuHidden();
             setStyle();
         }
-        if (ViewPagerScreenChangedEvent.TYPE.equals(event.getType()) && isShown() ) {
+        if (ViewPagerScreenChangedEvent.TYPE.equals(event.getType()) && isShown()) {
             topBar.dismissContextualMenu();
             topBar.onViewPagerScreenChanged(getScreenParams());
         }
@@ -147,12 +148,8 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
         if (screenParams.leftButton != null) {
             screenParams.leftButton.setStyleFromScreen(screenParams.styleParams);
         }
-        topBar.addTitleBarAndSetButtons(screenParams.rightButtons,
-                screenParams.leftButton,
-                leftButtonOnClickListener,
-                getNavigatorEventId(),
-                screenParams.overrideBackPressInJs,
-                styleParams);
+        topBar.addTitleBarAndSetButtons(screenParams.rightButtons, screenParams.leftButton, leftButtonOnClickListener,
+                getNavigatorEventId(), screenParams.overrideBackPressInJs, styleParams);
     }
 
     private void createAndAddTopBar() {
@@ -204,6 +201,10 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
         return screenParams;
     }
 
+    public ScreenParams getAllScreenParams() {
+        return screenParams;
+    }
+
     public void setTopBarVisible(boolean visible, boolean animate) {
         screenParams.styleParams.titleBarHidden = !visible;
         if (animate && styleParams.drawScreenBelowTopBar) {
@@ -216,7 +217,7 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
     }
 
     public void setTitleBarTitle(String title) {
-       topBar.setTitle(title, styleParams);
+        topBar.setTitle(title, styleParams);
     }
 
     public void setTitleBarSubtitle(String subtitle) {
@@ -229,11 +230,9 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
     }
 
     public void setTitleBarLeftButton(String navigatorEventId, LeftButtonOnClickListener backButtonListener,
-                                      TitleBarLeftButtonParams titleBarLeftButtonParams) {
+            TitleBarLeftButtonParams titleBarLeftButtonParams) {
         titleBarLeftButtonParams.setStyleFromScreen(styleParams);
-        topBar.setTitleBarLeftButton(navigatorEventId,
-                backButtonListener,
-                titleBarLeftButtonParams,
+        topBar.setTitleBarLeftButton(navigatorEventId, backButtonListener, titleBarLeftButtonParams,
                 screenParams.overrideBackPressInJs);
     }
 
@@ -283,24 +282,28 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
             @Override
             public void run() {
                 NavigationApplication.instance.getEventEmitter().sendDidAppearEvent(getScreenParams(), type);
-                if (onAnimationEnd != null) onAnimationEnd.run();
+                if (onAnimationEnd != null)
+                    onAnimationEnd.run();
             }
         });
     }
 
-    public void showWithSharedElementsTransitions(Map<String, SharedElementTransition> fromElements, final Runnable onAnimationEnd) {
+    public void showWithSharedElementsTransitions(Map<String, SharedElementTransition> fromElements,
+            final Runnable onAnimationEnd) {
         setStyle();
         sharedElements.setFromElements(fromElements);
         screenAnimator.showWithSharedElementsTransitions(onAnimationEnd);
     }
 
-    public void hideWithSharedElementTransitions(Map<String, SharedElementTransition> toElements, final Runnable onAnimationEnd) {
+    public void hideWithSharedElementTransitions(Map<String, SharedElementTransition> toElements,
+            final Runnable onAnimationEnd) {
         sharedElements.setFromElements(sharedElements.getToElements());
         sharedElements.setToElements(toElements);
         screenAnimator.hideWithSharedElementsTransition(onAnimationEnd);
     }
 
-    public void hide(Map<String, SharedElementTransition> sharedElements, Runnable onAnimationEnd, NavigationType type) {
+    public void hide(Map<String, SharedElementTransition> sharedElements, Runnable onAnimationEnd,
+            NavigationType type) {
         removeHiddenSharedElements();
         if (hasVisibleSharedElements()) {
             hideWithSharedElementTransitions(sharedElements, onAnimationEnd);
@@ -309,7 +312,8 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
         }
     }
 
-    public void animateHide(Map<String, SharedElementTransition> sharedElements, Runnable onAnimationEnd, NavigationType type) {
+    public void animateHide(Map<String, SharedElementTransition> sharedElements, Runnable onAnimationEnd,
+            NavigationType type) {
         removeHiddenSharedElements();
         if (hasVisibleSharedElements()) {
             hideWithSharedElementTransitions(sharedElements, onAnimationEnd);
@@ -336,7 +340,8 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
             @Override
             public void run() {
                 NavigationApplication.instance.getEventEmitter().sendDidDisappearEvent(getScreenParams(), type);
-                if (onAnimatedEnd != null) onAnimatedEnd.run();
+                if (onAnimatedEnd != null)
+                    onAnimatedEnd.run();
             }
         });
     }

@@ -151,7 +151,8 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
                 screenParams.leftButton,
                 leftButtonOnClickListener,
                 getNavigatorEventId(),
-                screenParams.overrideBackPressInJs, styleParams);
+                screenParams.overrideBackPressInJs,
+                styleParams);
     }
 
     private void createAndAddTopBar() {

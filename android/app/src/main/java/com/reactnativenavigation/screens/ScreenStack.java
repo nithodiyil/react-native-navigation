@@ -122,7 +122,7 @@ public class ScreenStack {
         pushScreenToVisibleStack(layoutParams, nextScreen, previousScreen, onPushComplete, null);
     }
 
-    private void pushScreenToVisibleStack(LayoutParams layoutParams, 
+    private void pushScreenToVisibleStack(LayoutParams layoutParams,
                                           final Screen nextScreen,
                                           final Screen previousScreen,
                                           @Nullable final Promise onPushComplete,

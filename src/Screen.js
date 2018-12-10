@@ -1,10 +1,12 @@
 /*eslint-disable*/
-import React, { Component } from "react";
-import { NativeAppEventEmitter, DeviceEventEmitter, Platform } from "react-native";
-import platformSpecific from "./deprecated/platformSpecificDeprecated";
-import Navigation from "./Navigation";
-
-import debounce from "debounce";
+import React, {Component} from 'react';
+import {
+  NativeAppEventEmitter,
+  DeviceEventEmitter,
+  Platform
+} from 'react-native';
+import platformSpecific from './deprecated/platformSpecificDeprecated';
+import Navigation from './Navigation';
 
 const NavigationSpecific = {
   push: platformSpecific.navigatorPush,
@@ -23,31 +25,13 @@ class Navigator {
     this.navigatorEventSubscription = null;
   }
 
-  push(params = {}, ignoreDebounce = false) {
-    if (ignoreDebounce) return NavigationSpecific.push(this, params);
-    return this.debouncedPush(params);
+  push(params = {}) {
+    return NavigationSpecific.push(this, params);
   }
 
-  debouncedPush = debounce(
-    (params = {}) => {
-      return NavigationSpecific.push(this, params);
-    },
-    500,
-    true
-  );
-
-  pop(params = {}, ignoreDebounce = false) {
-    if (ignoreDebounce) return NavigationSpecific.pop(this, params);
-    return this.debouncedPop(params);
+  pop(params = {}) {
+    return NavigationSpecific.pop(this, params);
   }
-
-  debouncedPop = debounce(
-    (params = {}) => {
-      return NavigationSpecific.pop(this, params);
-    },
-    500,
-    true
-  );
 
   popToRoot(params = {}) {
     return NavigationSpecific.popToRoot(this, params);
@@ -57,35 +41,17 @@ class Navigator {
     return NavigationSpecific.resetTo(this, params);
   }
 
-  showModal(params = {}, ignoreDebounce = false) {
-    if (ignoreDebounce) return Navigation.showModal(params);
-    return this.debouncedShowModal(params);
+  showModal(params = {}) {
+    return Navigation.showModal(params);
   }
-
-  debouncedShowModal = debounce(
-    (params = {}) => {
-      return Navigation.showModal(params);
-    },
-    500,
-    true
-  );
 
   showLightBox(params = {}) {
     return Navigation.showLightBox(params);
   }
 
-  dismissModal(params = {}, ignoreDebounce = false) {
-    if (ignoreDebounce) return Navigation.dismissModal(params);
-    return this.debouncedDismissModal(params);
+  dismissModal(params = {}) {
+    return Navigation.dismissModal(params);
   }
-
-  debouncedDismissModal = debounce(
-    (params = {}) => {
-      return Navigation.dismissModal(params);
-    },
-    500,
-    true
-  );
 
   dismissAllModals(params = {}) {
     return Navigation.dismissAllModals(params);
@@ -177,9 +143,7 @@ class Navigator {
 
   setOnNavigatorEvent(callback) {
     if (this.navigatorEventHandlers.length > 0) {
-      throw new Error(
-        "setOnNavigatorEvent can not be used after addOnNavigatorEvent has been called"
-      );
+      throw new Error('setOnNavigatorEvent can not be used after addOnNavigatorEvent has been called');
     }
     this.navigatorEventHandler = callback;
     this._registerNavigatorEvent();
@@ -187,25 +151,22 @@ class Navigator {
 
   addOnNavigatorEvent(callback) {
     if (this.navigatorEventHandler) {
-      throw new Error(
-        "addOnNavigatorEvent can not be used after setOnNavigatorEvent has been called"
-      );
+      throw new Error('addOnNavigatorEvent can not be used after setOnNavigatorEvent has been called');
     }
     if (this.navigatorEventHandlers.indexOf(callback) === -1) {
       this.navigatorEventHandlers.push(callback);
     }
     this._registerNavigatorEvent();
 
-    return () => this._removeOnNavigatorEvent(callback);
+    return () => this._removeOnNavigatorEvent(callback)
+    
   }
 
   _registerNavigatorEvent() {
     if (!this.navigatorEventSubscription) {
-      let Emitter = Platform.OS === "android" ? DeviceEventEmitter : NativeAppEventEmitter;
-      this.navigatorEventSubscription = Emitter.addListener(this.navigatorEventID, event =>
-        this.onNavigatorEvent(event)
-      );
-      Navigation.setEventHandler(this.navigatorEventID, event => this.onNavigatorEvent(event));
+      let Emitter = Platform.OS === 'android' ? DeviceEventEmitter : NativeAppEventEmitter;
+      this.navigatorEventSubscription = Emitter.addListener(this.navigatorEventID, (event) => this.onNavigatorEvent(event));
+      Navigation.setEventHandler(this.navigatorEventID, (event) => this.onNavigatorEvent(event));
     }
   }
 
@@ -251,11 +212,7 @@ class Screen extends Component {
   constructor(props) {
     super(props);
     if (props.navigatorID) {
-      this.navigator = new Navigator(
-        props.navigatorID,
-        props.navigatorEventID,
-        props.screenInstanceID
-      );
+      this.navigator = new Navigator(props.navigatorID, props.navigatorEventID, props.screenInstanceID);
     }
   }
 
@@ -267,4 +224,7 @@ class Screen extends Component {
   }
 }
 
-export { Screen, Navigator };
+export {
+  Screen,
+  Navigator
+};

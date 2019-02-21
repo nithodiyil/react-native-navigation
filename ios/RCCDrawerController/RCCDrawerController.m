@@ -52,9 +52,7 @@ UIViewController *rightViewController = nil;
     self.closeDrawerGestureModeMask = MMCloseDrawerGestureModeAll;
     
     NSNumber *disableOpenGesture = props[@"disableOpenGesture"];
-    if ([disableOpenGesture boolValue]) {
-        self.openDrawerGestureModeMask = MMOpenDrawerGestureModeNone;
-    }
+    self.openDrawerGestureModeMask = MMOpenDrawerGestureModeNone;
     
     [self setStyle];
     

@@ -56,7 +56,8 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
      */
     static NavigationActivity currentActivity;
     private static Promise startAppPromise;
-
+    static int numberOfActivities = 0;
+ 
     private ActivityParams activityParams;
     private ModalController modalController;
     private Layout layout;
@@ -73,7 +74,7 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
             finish();
             return;
         }
-
+        numberOfActivities += 1;
         activityParams = NavigationCommandsHandler.parseActivityParams(getIntent());
         disableActivityShowAnimationIfNeeded();
         setOrientation();
@@ -181,6 +182,7 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
     protected void onDestroy() {
         destroyLayouts();
         destroyJsIfNeeded();
+        numberOfActivities -= 1;
         NavigationApplication.instance.getActivityCallbacks().onActivityDestroyed(this);
         super.onDestroy();
     }
@@ -196,7 +198,7 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
     }
 
     private void destroyJsIfNeeded() {
-        if (currentActivity == null || currentActivity.isFinishing()) {
+        if ((currentActivity == null && numberOfActivities < 2) || (currentActivity != null && currentActivity.isFinishing())) {
             getReactGateway().onDestroyApp(this);
         }
     }
